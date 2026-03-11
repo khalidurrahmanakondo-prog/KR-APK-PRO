@@ -1,142 +1,169 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KR Downloader Pro</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root {
-  --bg: #0b0e14;
-  --card: #1a1d21;
-  --text: #ffffff;
-  --grad: linear-gradient(45deg,#ff0055,#ffdd00,#00ffcc,#3366ff,#cc00ff);
-}
-.light-mode { --bg:#f5f5f5; --card:#ffffff; --text:#000000; }
-body { margin:0; font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--text); padding-bottom:75px; transition:0.3s; overflow-x:hidden; }
-header { padding:15px; background:var(--card); border-bottom:1px solid #333; text-align:center; }
-.brand-name { font-size:20px; font-weight:900; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:textWave 3s linear infinite; }
-@keyframes textWave { to { background-position:200% center; } }
-.page{display:none;} .active-page{display:block;}
-#dl-status{display:none;margin-top:20px;text-align:center;background:var(--card);padding:20px;border-radius:15px;border:1px solid #333;}
-.progress-info{display:flex;justify-content:space-between;font-weight:bold;font-size:14px;margin-bottom:5px;color:#00ffcc;}
-.dl-bar-bg{width:100%;height:10px;background:#222;border-radius:10px;overflow:hidden;}
-.dl-bar-fill{width:0%;height:100%;background:var(--grad);background-size:200% 100%;transition:width 0.3s;}
-#final-dl-btn{display:none;margin-top:15px;padding:12px;background:var(--grad);color:#fff;border-radius:8px;font-weight:bold;width:100%;cursor:pointer;text-align:center;}
-.video-item{display:flex;background:var(--card);border-radius:12px;margin-bottom:12px;overflow:hidden;border:1px solid #444;align-items:center;padding:10px;cursor:pointer;}
-.video-thumb{width:100px;height:60px;background:#000;border-radius:8px;position:relative;overflow:hidden;flex-shrink:0;margin-right:15px;}
-.video-thumb video{width:100%;height:100%;object-fit:cover;}
-.video-details{flex-grow:1;overflow:hidden;}
-.video-details h4{margin:0;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.video-details p{margin:4px 0 0;font-size:11px;color:#888;}
-.set-item{display:flex;align-items:center;padding:15px;background:var(--card);border-bottom:1px solid #222;cursor:pointer;color:var(--text);}
-.set-item i:first-child{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--grad);color:white;margin-right:15px;}
-nav{position:fixed;bottom:0;width:100%;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222;z-index:1000;}
-.nav-link{color:#8b949e;text-align:center;font-size:11px;cursor:pointer;text-decoration:none;flex:1;}
-.nav-link.active{color:#fff;}
-.nav-link i{display:block;font-size:22px;margin-bottom:4px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KR Downloader Pro</title>
+    <style>
+        /* আপনার অরিজিনাল CSS মডেল */
+        :root { --bg: #0b0e14; --card: #1a1d21; --text: #ffffff; --grad: linear-gradient(45deg,#ff0055,#ffdd00,#00ffcc,#3366ff,#cc00ff); } 
+        .light-mode { --bg:#f5f5f5; --card:#ffffff; --text:#000000; } 
+        body { margin:0; font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--text); padding-bottom:75px; transition:0.3s; overflow-x:hidden; } 
+        header { padding:15px; background:var(--card); border-bottom:1px solid #333; text-align:center; } 
+        .brand-name { font-size:20px; font-weight:900; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:textWave 3s linear infinite; } 
+        @keyframes textWave { to { background-position:200% center; } } 
+        .page{display:none;} 
+        .active-page{display:block; padding: 15px;} 
+        #dl-status{display:none;margin-top:20px;text-align:center;background:var(--card);padding:20px;border-radius:15px;border:1px solid #333;} 
+        .progress-info{display:flex;justify-content:space-between;font-weight:bold;font-size:14px;margin-bottom:5px;color:#00ffcc;} 
+        .dl-bar-bg{width:100%;height:10px;background:#222;border-radius:10px;overflow:hidden;} 
+        .dl-bar-fill{width:0%;height:100%;background:var(--grad);background-size:200% 100%;transition:width 0.3s;} 
+        #final-dl-btn{display:none;margin-top:15px;padding:12px;background:var(--grad);color:#fff;border-radius:8px;font-weight:bold;width:100%;cursor:pointer;text-align:center; border:none;} 
+        
+        input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 10px; box-sizing: border-box; }
+        #dl-btn { width: 100%; padding: 12px; background: var(--grad); border: none; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; }
+
+        .video-item{display:flex;background:var(--card);border-radius:12px;margin-bottom:12px;overflow:hidden;border:1px solid #444;align-items:center;padding:10px;cursor:pointer;} 
+        .video-thumb{width:100px;height:60px;background:#000;border-radius:8px;position:relative;overflow:hidden;flex-shrink:0;margin-right:15px;} 
+        .video-thumb video{width:100%;height:100%;object-fit:cover;} 
+        .video-details{flex-grow:1;overflow:hidden;} 
+        .video-details h4{margin:0;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} 
+        .video-details p{margin:4px 0 0;font-size:11px;color:#888;} 
+        .set-item{display:flex;align-items:center;padding:15px;background:var(--card);border-bottom:1px solid #222;cursor:pointer;color:var(--text);} 
+        .set-item i:first-child{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--grad);color:white;margin-right:15px; font-style: normal;} 
+        nav{position:fixed;bottom:0;width:100%;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222;z-index:1000;} 
+        .nav-link{color:#8b949e;text-align:center;font-size:11px;cursor:pointer;text-decoration:none;flex:1;} 
+        .nav-link.active{color:#fff;} 
+        .nav-link i{display:block;font-size:22px;margin-bottom:4px; font-style: normal;}
+    </style>
 </head>
-<body><div id="home-page" class="page active-page">
-<header><span class="brand-name" id="h-title">KR DOWNLOADER PRO</span></header>
-<div style="padding:40px 20px;">
-<input type="text" id="url-input" style="width:100%; padding:15px; border-radius:12px; border:1px solid #333; background:var(--card); color:var(--text);" placeholder="লিঙ্ক এখানে পেস্ট করুন...">
-<button id="dl-btn" onclick="startDownload()" style="width:100%; margin-top:15px; padding:15px; border-radius:12px; border:none; background:var(--grad); color:#fff; font-weight:bold;">ডাউনলোড করুন</button><div id="dl-status">
-<div class="progress-info"><span id="st-text">প্রসেস হচ্ছে...</span><span id="pc-text">0%</span></div>
-<div class="dl-bar-bg"><div class="dl-bar-fill" id="dl-bar"></div></div>
-<div id="final-dl-btn" onclick="saveToGallery()">গ্যালারিতে সেভ করুন</div>
+<body id="body">
+
+<header>
+    <div class="brand-name" id="h-title">KR DOWNLOADER PRO</div>
+</header>
+
+<div id="home" class="page active-page">
+    <input type="text" id="url-input" placeholder="লিঙ্ক এখানে পেস্ট করুন...">
+    <button id="dl-btn" onclick="startDownload()">ডাউনলোড করুন</button>
+
+    <div id="dl-status">
+        <div class="progress-info">
+            <span id="st-text">প্রসেস হচ্ছে...0%</span>
+            <span id="pc-text">0%</span>
+        </div>
+        <div class="dl-bar-bg"><div class="dl-bar-fill" id="dl-bar"></div></div>
+        <button id="final-dl-btn" onclick="saveToGallery()">গ্যালারিতে সেভ করুন</button>
+    </div>
 </div>
+
+<div id="videos" class="page">
+    <h3 id="n-vid-title">ডাউনলোড করা ভিডিও</h3>
+    <div id="no-video" style="text-align:center; margin-top:20px;">কোনো ভিডিও নেই</div>
+    <div id="video-list-container"></div>
 </div>
-</div><div id="video-page" class="page">
-<header><span class="brand-name" id="v-title">ডাউনলোড করা ভিডিও</span></header>
-<div id="video-list-container" style="padding:15px;">
-<div id="no-video" style="text-align:center; color:#555; margin-top:30px;">কোনো ভিডিও নেই</div>
+
+<div id="settings" class="page">
+    <h3 id="n-set-title">সেটিংস</h3>
+    <div class="set-item" onclick="window.open('https://t.me/yourchannel')"><i>T</i> <span id="s-channel">টেলিগ্রাম চ্যানেল (Channel)</span></div>
+    <div class="set-item" onclick="window.open('https://t.me/yourbot')"><i>B</i> <span id="s-bot">টেলিগ্রাম বট (Bot)</span></div>
+    <div class="set-item" onclick="window.open('https://fb.com/yourpage')"><i>F</i> <span id="s-fb">ফেসবুক পেজ (Facebook)</span></div>
+    <div class="set-item" onclick="toggleLang()"><i>L</i> <span id="s-lang">ভাষা পরিবর্তন (English)</span></div>
+    <div class="set-item" onclick="toggleTheme()"><i>D</i> <span id="s-theme">থিম পরিবর্তন (Theme)</span></div>
+    <div class="set-item" onclick="recoverFiles()"><i>R</i> <span id="s-recovery">ফাইল পুনরুদ্ধার (Recovery)</span></div>
 </div>
-</div><div id="settings-page" class="page">
-<header><span class="brand-name" id="s-title">সেটিংস</span></header>
-<div style="background:var(--card); margin:10px; border-radius:12px; overflow:hidden; border:1px solid #333;">
-<div class="set-item" onclick="window.open('https://t.me/krtakaincomeofficialchannel')"><i class="fab fa-telegram-plane"></i><span class="title" id="s-channel">টেলিগ্রাম চ্যানেল (Channel)</span></div>
-<div class="set-item" onclick="window.open('https://t.me/Kr_taka_income_bot')"><i class="fas fa-robot"></i><span class="title" id="s-bot">টেলিগ্রাম বট (Bot)</span></div>
-<div class="set-item" onclick="window.open('https://www.facebook.com/profile.php?id=61586764666017')"><i class="fab fa-facebook"></i><span class="title" id="s-fb">ফেসবুক পেজ (Facebook)</span></div>
-<div class="set-item" onclick="toggleLang()"><i class="fas fa-language"></i><span class="title" id="s-lang">ভাষা পরিবর্তন (English)</span></div>
-<div class="set-item" onclick="toggleTheme()"><i class="fas fa-adjust"></i><span class="title" id="s-theme">থিম পরিবর্তন (Theme)</span></div>
-<div class="set-item" onclick="recoverFiles()"><i class="fas fa-trash-restore"></i><span class="title" id="s-rec">ফাইল পুনরুদ্ধার (Recovery)</span></div>
-</div>
-</div><nav>
-<div class="nav-link active" onclick="tab('home-page',this)"><i class="fas fa-home"></i><span id="n-home">হোম</span></div>
-<div class="nav-link" onclick="tab('video-page',this)"><i class="fas fa-play-circle"></i><span id="n-vid">ভিডিও</span></div>
-<div class="nav-link" onclick="tab('settings-page',this)"><i class="fas fa-cog"></i><span id="n-set">সেটিংস</span></div>
-</nav><script>
-let isEn=false, blobUrl=null, savedVids=JSON.parse(localStorage.getItem('kr_vids')||'[]');
+
+<nav>
+    <div class="nav-link active" onclick="tab('home', this)" id="n-home"><i>🏠</i>হোম</div>
+    <div class="nav-link" onclick="tab('videos', this)" id="n-vid"><i>🎬</i>ভিডিও</div>
+    <div class="nav-link" onclick="tab('settings', this)" id="n-set"><i>⚙️</i>সেটিংস</div>
+</nav>
+
+<script>
+let isEn=false, blobUrl=null, savedVids=JSON.parse(localStorage.getItem('kr_vids')||'[]'); 
+
 window.onload=renderVids;
 
-async function startDownload(){
-const val=document.getElementById('url-input').value;
-if(!val) return alert(isEn?"Paste Link!":"লিঙ্ক দিন!");
-document.getElementById('dl-status').style.display='block';
-document.getElementById('final-dl-btn').style.display='none';
-updateBar(40,isEn?"Connecting...":"সার্ভারে কানেক্ট হচ্ছে...");
-try{
-const api=`https://kr-downloader-api-2.onrender.com/download?url=${encodeURIComponent(val)}&clean=true`;
-const res=await fetch(api);
-const data=await res.json();
-if(data.download_url){
-updateBar(80,isEn?"Fetching No-Watermark...":"ওয়াটারমার্ক ছাড়া সংগ্রহ হচ্ছে...");
-const fRes=await fetch(data.download_url);
-const b=await fRes.blob();
-blobUrl=URL.createObjectURL(b);
-updateBar(100,isEn?"Success!":"সফল হয়েছে!");
-document.getElementById('final-dl-btn').style.display='block';
-savedVids.unshift({id:Date.now(), src:blobUrl, time:new Date().toLocaleString()});
-localStorage.setItem('kr_vids',JSON.stringify(savedVids));
-renderVids();
-}else alert("Link Error!");
-}catch(e){alert("Server Busy!");}
+async function startDownload(){ 
+    const val=document.getElementById('url-input').value; 
+    if(!val) return alert(isEn?"Paste Link!":"লিঙ্ক দিন!"); 
+    
+    document.getElementById('dl-status').style.display='block'; 
+    document.getElementById('final-dl-btn').style.display='none'; 
+    updateBar(40,isEn?"Connecting...":"সার্ভারে কানেক্ট হচ্ছে..."); 
+
+    try { 
+        const api=`https://kr-downloader-api-2.onrender.com/download?url=${encodeURIComponent(val)}&clean=true`; 
+        const res=await fetch(api); 
+        const data=await res.json(); 
+        
+        if(data.download_url){ 
+            updateBar(80,isEn?"Fetching No-Watermark...":"ওয়াটারমার্ক ছাড়া সংগ্রহ হচ্ছে..."); 
+            const fRes=await fetch(data.download_url); 
+            const b=await fRes.blob(); 
+            if(blobUrl) URL.revokeObjectURL(blobUrl); // Memory cleanup
+            blobUrl=URL.createObjectURL(b); 
+            
+            updateBar(100,isEn?"Success!":"সফল হয়েছে!"); 
+            document.getElementById('final-dl-btn').style.display='block'; 
+            
+            savedVids.unshift({id:Date.now(), src:blobUrl, time:new Date().toLocaleString()}); 
+            localStorage.setItem('kr_vids',JSON.stringify(savedVids)); 
+            renderVids(); 
+        }else alert("Link Error!"); 
+    }catch(e){alert("Server Busy!");} 
 }
 
-function updateBar(p,t){
-document.getElementById('dl-bar').style.width=p+"%";
-document.getElementById('pc-text').innerText=p+"%";
-document.getElementById('st-text').innerText=t;
+function updateBar(p,t){ 
+    document.getElementById('dl-bar').style.width=p+"%"; 
+    document.getElementById('pc-text').innerText=p+"%"; 
+    document.getElementById('st-text').innerText=t; 
 }
 
-function saveToGallery(){
-const a=document.createElement('a'); a.href=blobUrl; a.download='KR_Video.mp4'; a.click();
+function saveToGallery(){ 
+    const a=document.createElement('a'); 
+    a.href=blobUrl; 
+    a.download=`KR_Video_${Date.now()}.mp4`; 
+    document.body.appendChild(a);
+    a.click(); 
+    document.body.removeChild(a);
 }
 
-function renderVids(){
-const container=document.getElementById('video-list-container');
-if(savedVids.length>0) document.getElementById('no-video').style.display='none';
-container.innerHTML=savedVids.map(v=>`<div class="video-item" onclick="window.open('${v.src}')"><div class="video-thumb"><video src="${v.src}"></video></div><div class="video-details"><h4>Video_${v.id}</h4><p>${v.time}</p><p style="color:#00ffcc;">No Watermark • HD</p></div></div>`).join('');
+function renderVids(){ 
+    const container=document.getElementById('video-list-container'); 
+    if(savedVids.length>0) document.getElementById('no-video').style.display='none'; 
+    container.innerHTML=savedVids.map(v=>`<div class="video-item" onclick="window.open('${v.src}')"><div class="video-thumb"><video src="${v.src}"></video></div><div class="video-details"><h4>Video_${v.id}</h4><p>${v.time}</p><p style="color:#00ffcc;">No Watermark • HD</p></div></div>`).join(''); 
 }
 
-function toggleLang(){
-isEn=!isEn;
-document.getElementById('h-title').innerText=isEn?"KR DOWNLOADER PRO":"কেআর ডাউনলোডার প্রো";
-document.getElementById('dl-btn').innerText=isEn?"Download Now":"ডাউনলোড করুন";
-document.getElementById('url-input').placeholder=isEn?"Paste link here...":"লিঙ্ক এখানে পেস্ট করুন...";
-document.getElementById('s-channel').innerText=isEn?"Telegram Channel":"টেলিগ্রাম চ্যানেল (Channel)";
-document.getElementById('s-bot').innerText=isEn?"Telegram Bot":"টেলিগ্রাম বট (Bot)";
-document.getElementById('s-fb').innerText=isEn?"Facebook Page":"ফেসবুক পেজ (Facebook)";
-document.getElementById('s-lang').innerText=isEn?"Change Language (BN)":"ভাষা পরিবর্তন (English)";
-document.getElementById('s-theme').innerText=isEn?"Change Theme":"থিম পরিবর্তন (Theme)";
-document.getElementById('n-home').innerText=isEn?"Home":"হোম";
-document.getElementById('n-vid').innerText=isEn?"Videos":"ভিডিও";
-document.getElementById('n-set').innerText=isEn?"Settings":"সেটিংস";
+function toggleLang(){ 
+    isEn=!isEn; 
+    document.getElementById('h-title').innerText=isEn?"KR DOWNLOADER PRO":"কেআর ডাউনলোডার প্রো"; 
+    document.getElementById('dl-btn').innerText=isEn?"Download Now":"ডাউনলোড করুন"; 
+    document.getElementById('url-input').placeholder=isEn?"Paste link here...":"লিঙ্ক এখানে পেস্ট করুন..."; 
+    document.getElementById('s-channel').innerText=isEn?"Telegram Channel":"টেলিগ্রাম চ্যানেল (Channel)"; 
+    document.getElementById('s-bot').innerText=isEn?"Telegram Bot":"টেলিগ্রাম বট (Bot)"; 
+    document.getElementById('s-fb').innerText=isEn?"Facebook Page":"ফেসবুক পেজ (Facebook)"; 
+    document.getElementById('s-lang').innerText=isEn?"Change Language (BN)":"ভাষা পরিবর্তন (English)"; 
+    document.getElementById('s-theme').innerText=isEn?"Change Theme":"থিম পরিবর্তন (Theme)"; 
+    document.getElementById('n-home').innerText=isEn?"Home":"হোম"; 
+    document.getElementById('n-vid').innerText=isEn?"Videos":"ভিডিও"; 
+    document.getElementById('n-set').innerText=isEn?"Settings":"সেটিংস"; 
 }
 
 function toggleTheme(){ document.body.classList.toggle('light-mode'); }
 
-function tab(id,el){
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));
-document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));
-document.getElementById(id).classList.add('active-page');
-el.classList.add('active');
+function tab(id,el){ 
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page')); 
+    document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active')); 
+    document.getElementById(id).classList.add('active-page'); 
+    el.classList.add('active'); 
 }
 
-// 🔹 Recovery function
-function recoverFiles(){
-if(savedVids.length===0){ alert(isEn?"No videos to recover!":"কোনো ভিডিও নেই রিকভার করার জন্য!"); return; }
-renderVids(); alert(isEn?"Videos recovered!":"ভিডিও রিকভার করা হয়েছে!");
+function recoverFiles(){ 
+    if(savedVids.length===0){ alert(isEn?"No videos to recover!":"কোনো ভিডিও নেই!"); return; } 
+    renderVids(); 
+    alert(isEn?"Videos recovered!":"ভিডিও রিকভার করা হয়েছে!"); 
 }
-</script></body>
+</script>
+</body>
 </html>
