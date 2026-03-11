@@ -64,9 +64,12 @@
 
 <div id="settings" class="page">
     <h3 id="n-set-title">সেটিংস</h3>
-    <div class="set-item" onclick="window.open('https://t.me/yourchannel')"><i>T</i> <span id="s-channel">টেলিগ্রাম চ্যানেল (Channel)</span></div>
-    <div class="set-item" onclick="window.open('https://t.me/yourbot')"><i>B</i> <span id="s-bot">টেলিগ্রাম বট (Bot)</span></div>
-    <div class="set-item" onclick="window.open('https://www.facebook.com/profile.php?id=61586764666017')"><i>F</i> <span id="s-fb">ফেসবুক পেজ (Facebook)</span></div>
+    
+    <div class="set-item" onclick="window.open('https://t.me/krtakaincomeofficialchannel', '_blank')"><i>T</i> <span id="s-channel">টেলিগ্রাম চ্যানেল (Official)</span></div>
+    
+    <div class="set-item" onclick="window.open('https://t.me/Kr_taka_income_bot', '_blank')"><i>B</i> <span id="s-bot">Kr Taka Income Bot</span></div>
+    
+    <div class="set-item" onclick="window.open('https://www.facebook.com/profile.php?id=61586764666017', '_blank')"><i>F</i> <span id="s-fb">ফেসবুক পেজ (Facebook)</span></div>
     
     <div class="set-item" onclick="toggleLang()"><i>L</i> <span id="s-lang">ভাষা পরিবর্তন (English)</span></div>
     <div class="set-item" onclick="toggleTheme()"><i>D</i> <span id="s-theme">থিম পরিবর্তন (Theme)</span></div>
@@ -121,6 +124,7 @@ function updateBar(p,t){
 }
 
 function saveToGallery(){ 
+    if(!blobUrl) return;
     const a=document.createElement('a'); 
     a.href=blobUrl; 
     a.download=`KR_Video_${Date.now()}.mp4`; 
@@ -140,8 +144,8 @@ function toggleLang(){
     document.getElementById('h-title').innerText=isEn?"KR DOWNLOADER PRO":"কেআর ডাউনলোডার প্রো"; 
     document.getElementById('dl-btn').innerText=isEn?"Download Now":"ডাউনলোড করুন"; 
     document.getElementById('url-input').placeholder=isEn?"Paste link here...":"লিঙ্ক এখানে পেস্ট করুন..."; 
-    document.getElementById('s-channel').innerText=isEn?"Telegram Channel":"টেলিগ্রাম চ্যানেল (Channel)"; 
-    document.getElementById('s-bot').innerText=isEn?"Telegram Bot":"টেলিগ্রাম বট (Bot)"; 
+    document.getElementById('s-channel').innerText=isEn?"Telegram Channel":"টেলিগ্রাম চ্যানেল (Official)"; 
+    document.getElementById('s-bot').innerText=isEn?"Kr Taka Income Bot":"Kr Taka Income Bot"; 
     document.getElementById('s-fb').innerText=isEn?"Facebook Page":"ফেসবুক পেজ (Facebook)"; 
     document.getElementById('s-lang').innerText=isEn?"Change Language (BN)":"ভাষা পরিবর্তন (English)"; 
     document.getElementById('s-theme').innerText=isEn?"Change Theme":"থিম পরিবর্তন (Theme)"; 
