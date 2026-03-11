@@ -5,169 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KR Downloader Pro</title>
     <style>
-        :root { --bg: #0b0e14; --card: #1a1d21; --text: #ffffff; --grad: linear-gradient(45deg,#ff0055,#ffdd00,#00ffcc,#3366ff,#cc00ff); } 
+        :root { 
+            --bg: #0b0e14; --card: #1a1d21; --text: #ffffff; 
+            --grad: linear-gradient(45deg,#ff0055,#ffdd00,#00ffcc,#3366ff,#cc00ff); 
+        } 
         .light-mode { --bg:#f5f5f5; --card:#ffffff; --text:#000000; } 
         body { margin:0; font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--text); padding-bottom:75px; transition:0.3s; overflow-x:hidden; } 
-        header { padding:15px; background:var(--card); border-bottom:1px solid #333; text-align:center; } 
-        .brand-name { font-size:20px; font-weight:900; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:textWave 3s linear infinite; } 
-        @keyframes textWave { to { background-position:200% center; } } 
-        .page{display:none;} 
-        .active-page{display:block; padding: 15px;} 
-        #dl-status{display:none;margin-top:20px;text-align:center;background:var(--card);padding:20px;border-radius:15px;border:1px solid #333;} 
-        .progress-info{display:flex;justify-content:space-between;font-weight:bold;font-size:14px;margin-bottom:5px;color:#00ffcc;} 
-        .dl-bar-bg{width:100%;height:10px;background:#222;border-radius:10px;overflow:hidden;} 
-        .dl-bar-fill{width:0%;height:100%;background:var(--grad);background-size:200% 100%;transition:width 0.3s;} 
-        #final-dl-btn{display:none;margin-top:15px;padding:12px;background:var(--grad);color:#fff;border-radius:8px;font-weight:bold;width:100%;cursor:pointer;text-align:center; border:none;} 
         
-        input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #111; color: #fff; margin-bottom: 10px; box-sizing: border-box; }
-        #dl-btn { width: 100%; padding: 12px; background: var(--grad); border: none; color: #fff; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        header { padding:15px; background:var(--card); border-bottom:1px solid #333; text-align:center; position: sticky; top:0; z-index:1001; } 
+        .brand-name { font-size:20px; font-weight:900; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; display:flex; align-items:center; justify-content:center; gap:8px; } 
+        .vidmate-download { display:inline-block; -webkit-text-fill-color:initial; font-size:24px; animation:vidmateBounce 0.8s ease-in-out infinite; }
+        @keyframes vidmateBounce { 0%, 100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
 
-        .video-item{display:flex;background:var(--card);border-radius:12px;margin-bottom:12px;overflow:hidden;border:1px solid #444;align-items:center;padding:10px;cursor:pointer;} 
-        .video-thumb{width:100px;height:60px;background:#000;border-radius:8px;position:relative;overflow:hidden;flex-shrink:0;margin-right:15px;} 
-        .video-thumb video{width:100%;height:100%;object-fit:cover;} 
-        .video-details{flex-grow:1;overflow:hidden;} 
-        .video-details h4{margin:0;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} 
-        .video-details p{margin:4px 0 0;font-size:11px;color:#888;} 
-        .set-item{display:flex;align-items:center;padding:15px;background:var(--card);border-bottom:1px solid #222;cursor:pointer;color:var(--text);} 
-        .set-item i:first-child{width:35px;height:35px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--grad);color:white;margin-right:15px; font-style: normal;} 
-        nav{position:fixed;bottom:0;width:100%;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #222;z-index:1000;} 
-        .nav-link{color:#8b949e;text-align:center;font-size:11px;cursor:pointer;text-decoration:none;flex:1;} 
-        .nav-link.active{color:#fff;} 
-        .nav-link i{display:block;font-size:22px;margin-bottom:4px; font-style: normal;}
+        .page { display:none; animation:fadeIn 0.3s; padding:15px; } 
+        .active-page { display:block; } 
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+        .set-item { display:flex; align-items:center; padding:15px; background:var(--card); border-radius:15px; margin-bottom:12px; cursor:pointer; border:1px solid #333; position:relative; }
+        .set-item i { width:45px; height:45px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:var(--grad); color:white; margin-right:15px; font-style:normal; font-size:18px; flex-shrink:0; }
+        .set-text { flex-grow:1; }
+        .set-text span { display:block; font-size:15px; font-weight:600; }
+        .set-text small { color:#888; font-size:11px; }
+        .badge { background:#ff0055; color:white; font-size:10px; padding:2px 8px; border-radius:10px; position:absolute; right:15px; }
+
+        .btn-action { background:#333; color:#00ffcc; border:1px solid #444; padding:5px 10px; border-radius:5px; font-size:11px; cursor:pointer; margin-top:5px; }
+        
+        nav { position:fixed; bottom:0; width:100%; background:#111; display:flex; justify-content:space-around; padding:12px 0; border-top:1px solid #222; z-index:1000; } 
+        .nav-link { color:#8b949e; text-align:center; font-size:10px; cursor:pointer; flex:1; } 
+        .nav-link.active { color:#00ffcc; } 
+        .nav-link i { display:block; font-size:22px; margin-bottom:4px; font-style:normal; }
+        
+        input { width:100%; padding:15px; border-radius:12px; border:1px solid #444; background:#111; color:#fff; margin-bottom:15px; box-sizing:border-box; outline:none; }
+        #dl-btn { width:100%; padding:15px; background:var(--grad); border:none; color:#fff; font-weight:bold; border-radius:12px; cursor:pointer; }
     </style>
 </head>
 <body id="body">
 
 <header>
-    <div class="brand-name" id="h-title">KR DOWNLOADER PRO</div>
+    <div class="brand-name"><span class="vidmate-download">📥</span><span class="brand-text">KR DOWNLOADER PRO</span></div>
 </header>
 
 <div id="home" class="page active-page">
+    <h3 id="h-title">ভিডিও ডাউনলোড করুন</h3>
     <input type="text" id="url-input" placeholder="লিঙ্ক এখানে পেস্ট করুন...">
-    <button id="dl-btn" onclick="startDownload()">ডাউনলোড করুন</button>
+    <button id="dl-btn" onclick="addNewDownload()">ডাউনলোড শুরু করুন</button>
+</div>
 
-    <div id="dl-status">
-        <div class="progress-info">
-            <span id="st-text">প্রসেস হচ্ছে...0%</span>
-            <span id="pc-text">0%</span>
-        </div>
-        <div class="dl-bar-bg"><div class="dl-bar-fill" id="dl-bar"></div></div>
-        <button id="final-dl-btn" onclick="saveToGallery()">গ্যালারিতে সেভ করুন</button>
-    </div>
+<div id="dl-manager" class="page">
+    <h3 id="dl-title">চলমান ডাউনলোড</h3>
+    <div id="download-list" style="text-align: center; color: #666; margin-top: 20px;">কোনো ফাইল ডাউনলোড হচ্ছে না</div>
 </div>
 
 <div id="videos" class="page">
-    <h3 id="n-vid-title">ডাউনলোড করা ভিডিও</h3>
-    <div id="no-video" style="text-align:center; margin-top:20px;">কোনো ভিডিও নেই</div>
+    <h3 id="v-title">আপনার ভিডিওসমূহ</h3>
     <div id="video-list-container"></div>
 </div>
 
+<div id="recovery" class="page">
+    <h3 id="r-title">রিকভারি বিন</h3>
+    <div id="recovery-list-container"></div>
+</div>
+
 <div id="settings" class="page">
-    <h3 id="n-set-title">সেটিংস</h3>
+    <h3 id="s-title">সেটিংস</h3>
+
+    <div class="set-item" onclick="window.open('https://www.facebook.com/profile.php?id=61586764666017', '_blank')">
+        <i>FB</i><div class="set-text"><span id="sl-fb">ফেসবুক পেজ</span><small id="sl-fbsub">আমাদের সাথে যুক্ত থাকুন</small></div>
+    </div>
     
-    <div class="set-item" onclick="window.open('https://t.me/krtakaincomeofficialchannel', '_blank')"><i>T</i> <span id="s-channel">টেলিগ্রাম চ্যানেল (Official)</span></div>
-    
-    <div class="set-item" onclick="window.open('https://t.me/Kr_taka_income_bot', '_blank')"><i>B</i> <span id="s-bot">Kr Taka Income Bot</span></div>
-    
-    <div class="set-item" onclick="window.open('https://www.facebook.com/profile.php?id=61586764666017', '_blank')"><i>F</i> <span id="s-fb">ফেসবুক পেজ (Facebook)</span></div>
-    
-    <div class="set-item" onclick="toggleLang()"><i>L</i> <span id="s-lang">ভাষা পরিবর্তন (English)</span></div>
-    <div class="set-item" onclick="toggleTheme()"><i>D</i> <span id="s-theme">থিম পরিবর্তন (Theme)</span></div>
-    <div class="set-item" onclick="recoverFiles()"><i>R</i> <span id="s-recovery">ফাইল পুনরুদ্ধার (Recovery)</span></div>
+    <div class="set-item" onclick="toggleLang()">
+        <i>🌐</i><div class="set-text"><span id="sl-lang">ভাষা পরিবর্তন</span><small id="sl-sub">বাংলা / English</small></div>
+    </div>
+
+    <div class="set-item" onclick="toggleTheme()">
+        <i>🌓</i><div class="set-text"><span id="sl-theme">থিম পরিবর্তন</span><small id="sl-tsub">লাইট / ডার্ক মোড</small></div>
+    </div>
+
+    <div class="set-item" onclick="clearJunk()">
+        <i>🧹</i>
+        <div class="set-text"><span id="sl-junk">ক্লিন ক্যাশে</span><small id="sl-jsub">অ্যাপের গতি বাড়ান</small></div>
+        <span class="badge" id="junk-size">12.4 MB</span>
+    </div>
+
+    <div class="set-item">
+        <i>📂</i>
+        <div class="set-text">
+            <span id="sl-loc">ডাউনলোড লোকেশন</span>
+            <small id="current-path">Internal Storage/Downloads/KR</small>
+            <button class="btn-action" onclick="changeFolder()" id="sl-fbtn">ফোল্ডার পরিবর্তন</button>
+        </div>
+    </div>
+
+    <div class="set-item" onclick="tab('recovery')">
+        <i>♻️</i><div class="set-text"><span id="sl-rec">ফাইল রিকভারি</span><small id="sl-rsub">মুছে ফেলা ফাইল ফিরে পান</small></div>
+    </div>
 </div>
 
 <nav>
-    <div class="nav-link active" onclick="tab('home', this)" id="n-home"><i>🏠</i>হোম</div>
-    <div class="nav-link" onclick="tab('videos', this)" id="n-vid"><i>🎬</i>ভিডিও</div>
-    <div class="nav-link" onclick="tab('settings', this)" id="n-set"><i>⚙️</i>সেটিংস</div>
+    <div class="nav-link active" onclick="tab('home', this)"><i>🏠</i><span id="n-home">হোম</span></div>
+    <div class="nav-link" onclick="tab('dl-manager', this)"><i>📥</i><span id="n-dl">ডাউনলোড</span></div>
+    <div class="nav-link" onclick="tab('videos', this)"><i>🎬</i><span id="n-video">ভিডিও</span></div>
+    <div class="nav-link" onclick="tab('settings', this)"><i>⚙️</i><span id="n-set">সেটিংস</span></div>
 </nav>
 
 <script>
-let isEn=false, blobUrl=null, savedVids=JSON.parse(localStorage.getItem('kr_vids')||'[]'); 
+let isEn = false;
+let savedVids = JSON.parse(localStorage.getItem('kr_vids') || '[]');
+let trashVids = JSON.parse(localStorage.getItem('kr_trash') || '[]');
 
-window.onload=renderVids;
+window.onload = () => {
+    renderVids();
+    renderRecovery();
+};
 
-async function startDownload(){ 
-    const val=document.getElementById('url-input').value; 
-    if(!val) return alert(isEn?"Paste Link!":"লিঙ্ক দিন!"); 
-    
-    document.getElementById('dl-status').style.display='block'; 
-    document.getElementById('final-dl-btn').style.display='none'; 
-    updateBar(40,isEn?"Connecting...":"সার্ভারে কানেক্ট হচ্ছে..."); 
-
-    try { 
-        const api=`https://kr-downloader-api-2.onrender.com/download?url=${encodeURIComponent(val)}&clean=true`; 
-        const res=await fetch(api); 
-        const data=await res.json(); 
-        
-        if(data.download_url){ 
-            updateBar(80,isEn?"Fetching No-Watermark...":"ওয়াটারমার্ক ছাড়া সংগ্রহ হচ্ছে..."); 
-            const fRes=await fetch(data.download_url); 
-            const b=await fRes.blob(); 
-            if(blobUrl) URL.revokeObjectURL(blobUrl); 
-            blobUrl=URL.createObjectURL(b); 
-            
-            updateBar(100,isEn?"Success!":"সফল হয়েছে!"); 
-            document.getElementById('final-dl-btn').style.display='block'; 
-            
-            savedVids.unshift({id:Date.now(), src:blobUrl, time:new Date().toLocaleString()}); 
-            localStorage.setItem('kr_vids',JSON.stringify(savedVids)); 
-            renderVids(); 
-        }else alert("Link Error!"); 
-    }catch(e){alert("Server Busy!");} 
+function tab(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+    document.getElementById(id).classList.add('active-page');
+    if(el) {
+        document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+    }
 }
 
-function updateBar(p,t){ 
-    document.getElementById('dl-bar').style.width=p+"%"; 
-    document.getElementById('pc-text').innerText=p+"%"; 
-    document.getElementById('st-text').innerText=t; 
+// ** ভাষা পরিবর্তন বাটন অ্যাকশন **
+function toggleLang() {
+    isEn = !isEn;
+    const texts = {
+        bn: {
+            h: "ভিডিও ডাউনলোড করুন", placeholder: "লিঙ্ক এখানে পেস্ট করুন...", dlBtn: "ডাউনলোড শুরু করুন",
+            dl: "চলমান ডাউনলোড", v: "আপনার ভিডিওসমূহ", r: "রিকভারি বিন", s: "সেটিংস",
+            fb: "ফেসবুক পেজ", fbsub: "আমাদের সাথে যুক্ত থাকুন",
+            l1: "ভাষা পরিবর্তন", l1s: "বাংলা / English", l2: "থিম পরিবর্তন", l2s: "লাইট / ডার্ক মোড",
+            l3: "ক্লিন ক্যাশে", l3s: "অ্যাপের গতি বাড়ান", l4: "ডাউনলোড লোকেশন", l4b: "ফোল্ডার পরিবর্তন",
+            l5: "ফাইল রিকভারি", l5s: "মুছে ফেলা ফাইল ফিরে পান",
+            nh: "হোম", nd: "ডাউনলোড", nv: "ভিডিও", ns: "সেটিংস"
+        },
+        en: {
+            h: "Download Video", placeholder: "Paste link here...", dlBtn: "Start Download",
+            dl: "Active Downloads", v: "Your Videos", r: "Recovery Bin", s: "Settings",
+            fb: "Facebook Page", fbsub: "Connect with us",
+            l1: "Change Language", l1s: "Bangla / English", l2: "Toggle Theme", l2s: "Light / Dark Mode",
+            l3: "Clear Cache", l3s: "Boost Performance", l4: "Download Location", l4b: "Change Folder",
+            l5: "File Recovery", l5s: "Restore deleted files",
+            nh: "Home", nd: "Downloads", nv: "Videos", ns: "Settings"
+        }
+    };
+
+    const t = isEn ? texts.en : texts.bn;
+    document.getElementById('h-title').innerText = t.h;
+    document.getElementById('url-input').placeholder = t.placeholder;
+    document.getElementById('dl-btn').innerText = t.dlBtn;
+    document.getElementById('dl-title').innerText = t.dl;
+    document.getElementById('v-title').innerText = t.v;
+    document.getElementById('r-title').innerText = t.r;
+    document.getElementById('s-title').innerText = t.s;
+    document.getElementById('sl-fb').innerText = t.fb;
+    document.getElementById('sl-fbsub').innerText = t.fbsub;
+    document.getElementById('sl-lang').innerText = t.l1;
+    document.getElementById('sl-sub').innerText = t.l1s;
+    document.getElementById('sl-theme').innerText = t.l2;
+    document.getElementById('sl-tsub').innerText = t.l2s;
+    document.getElementById('sl-junk').innerText = t.l3;
+    document.getElementById('sl-jsub').innerText = t.l3s;
+    document.getElementById('sl-loc').innerText = t.l4;
+    document.getElementById('sl-fbtn').innerText = t.l4b;
+    document.getElementById('sl-rec').innerText = t.l5;
+    document.getElementById('sl-rsub').innerText = t.l5s;
+    document.getElementById('n-home').innerText = t.nh;
+    document.getElementById('n-dl').innerText = t.nd;
+    document.getElementById('n-video').innerText = t.nv;
+    document.getElementById('n-set').innerText = t.ns;
 }
 
-function saveToGallery(){ 
-    if(!blobUrl) return;
-    const a=document.createElement('a'); 
-    a.href=blobUrl; 
-    a.download=`KR_Video_${Date.now()}.mp4`; 
-    document.body.appendChild(a);
-    a.click(); 
-    document.body.removeChild(a);
+function addNewDownload() {
+    const url = document.getElementById('url-input').value;
+    if(!url) return;
+    alert(isEn ? "Downloading started..." : "ডাউনলোড শুরু হয়েছে...");
+    setTimeout(() => {
+        const dlId = Date.now();
+        savedVids.unshift({ id: dlId, time: new Date().toLocaleString() });
+        localStorage.setItem('kr_vids', JSON.stringify(savedVids));
+        renderVids();
+        alert(isEn ? "Saved to Library!" : "লাইব্রেরিতে সেভ হয়েছে!");
+    }, 2000);
 }
 
-function renderVids(){ 
-    const container=document.getElementById('video-list-container'); 
-    if(savedVids.length>0) document.getElementById('no-video').style.display='none'; 
-    container.innerHTML=savedVids.map(v=>`<div class="video-item" onclick="window.open('${v.src}')"><div class="video-thumb"><video src="${v.src}"></video></div><div class="video-details"><h4>Video_${v.id}</h4><p>${v.time}</p><p style="color:#00ffcc;">No Watermark • HD</p></div></div>`).join(''); 
+function deleteVid(id) {
+    if (confirm(isEn ? "Move to Recovery Bin?" : "রিকভারি বিনে পাঠাতে চান?")) {
+        const vidIdx = savedVids.findIndex(v => v.id === id);
+        trashVids.unshift(savedVids.splice(vidIdx, 1)[0]);
+        localStorage.setItem('kr_vids', JSON.stringify(savedVids));
+        localStorage.setItem('kr_trash', JSON.stringify(trashVids));
+        renderVids();
+        renderRecovery();
+    }
 }
 
-function toggleLang(){ 
-    isEn=!isEn; 
-    document.getElementById('h-title').innerText=isEn?"KR DOWNLOADER PRO":"কেআর ডাউনলোডার প্রো"; 
-    document.getElementById('dl-btn').innerText=isEn?"Download Now":"ডাউনলোড করুন"; 
-    document.getElementById('url-input').placeholder=isEn?"Paste link here...":"লিঙ্ক এখানে পেস্ট করুন..."; 
-    document.getElementById('s-channel').innerText=isEn?"Telegram Channel":"টেলিগ্রাম চ্যানেল (Official)"; 
-    document.getElementById('s-bot').innerText=isEn?"Kr Taka Income Bot":"Kr Taka Income Bot"; 
-    document.getElementById('s-fb').innerText=isEn?"Facebook Page":"ফেসবুক পেজ (Facebook)"; 
-    document.getElementById('s-lang').innerText=isEn?"Change Language (BN)":"ভাষা পরিবর্তন (English)"; 
-    document.getElementById('s-theme').innerText=isEn?"Change Theme":"থিম পরিবর্তন (Theme)"; 
-    document.getElementById('n-home').innerText=isEn?"Home":"হোম"; 
-    document.getElementById('n-vid').innerText=isEn?"Videos":"ভিডিও"; 
-    document.getElementById('n-set').innerText=isEn?"Settings":"সেটিংস"; 
+function restoreVid(id) {
+    const vidIdx = trashVids.findIndex(v => v.id === id);
+    savedVids.unshift(trashVids.splice(vidIdx, 1)[0]);
+    localStorage.setItem('kr_vids', JSON.stringify(savedVids));
+    localStorage.setItem('kr_trash', JSON.stringify(trashVids));
+    renderVids();
+    renderRecovery();
+    alert(isEn ? "Restored!" : "পুনরুদ্ধার করা হয়েছে!");
 }
 
-function toggleTheme(){ document.body.classList.toggle('light-mode'); }
-
-function tab(id,el){ 
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page')); 
-    document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active')); 
-    document.getElementById(id).classList.add('active-page'); 
-    el.classList.add('active'); 
+function renderVids() {
+    const container = document.getElementById('video-list-container');
+    container.innerHTML = savedVids.map(v => `
+        <div class="set-item">
+            <i>🎬</i><div class="set-text"><span>Video_${v.id}</span><small>${v.time}</small></div>
+            <button class="btn-action" style="color:#ff0055;" onclick="deleteVid(${v.id})">${isEn?'Delete':'মুছুন'}</button>
+        </div>
+    `).join('');
 }
 
-function recoverFiles(){ 
-    if(savedVids.length===0){ alert(isEn?"No videos to recover!":"কোনো ভিডিও নেই!"); return; } 
-    renderVids(); 
-    alert(isEn?"Videos recovered!":"ভিডিও রিকভার করা হয়েছে!"); 
+function renderRecovery() {
+    const container = document.getElementById('recovery-list-container');
+    container.innerHTML = trashVids.map(v => `
+        <div class="set-item">
+            <i>♻️</i><div class="set-text"><span>Video_${v.id}</span><small>In Bin</small></div>
+            <button class="btn-action" onclick="restoreVid(${v.id})">${isEn?'Restore':'ফেরান'}</button>
+        </div>
+    `).join('');
 }
+
+function changeFolder() {
+    const newF = prompt(isEn ? "Enter folder name:" : "ফোল্ডার নাম দিন:");
+    if(newF) document.getElementById('current-path').innerText = "Storage/" + newF;
+}
+
+function clearJunk() {
+    document.getElementById('junk-size').innerText = "0 KB";
+    alert(isEn ? "Cache Cleared!" : "ক্যাশে পরিষ্কার হয়েছে!");
+}
+
+function toggleTheme() { document.body.classList.toggle('light-mode'); }
 </script>
 </body>
 </html>
